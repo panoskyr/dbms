@@ -4,7 +4,7 @@ create table Calendar(
    available boolean,
    price money,
    adjusted_price money,
-   minimum_nights smallint,
-   maximum_nights smallint,
+   minimum_nights int,
+   maximum_nights int,
    PRIMARY KEY(listing_id,date)
 );
