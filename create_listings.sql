@@ -93,7 +93,7 @@ create table Listings(
    review_scores_location varchar(10),
    review_scores_value varchar(10),
    requires_license boolean,
-   license int,
+   license TEXT,
    jurisdiction_names varchar(10),
    instant_bookable boolean,
    is_business_travel_ready boolean,
