@@ -1,7 +1,7 @@
 BEGIN;
 
 ALTER TABLE Listings
-ADD FOREIGN KEY (neighbourhood_cleansed) REFERENCES Neighbourhoods(neighbourhoods);
+ADD FOREIGN KEY (neighbourhood_cleansed) REFERENCES Neighbourhoods(neighbourhood);
 
 ALTER TABLE Listings_Summary
 ADD FOREIGN KEY (id) REFERENCES Listings(id);
