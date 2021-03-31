@@ -1,6 +1,7 @@
 BEGIN;
 SHOW client_encoding;
 set client_encoding to 'utf8';
+SHOW client_encoding;
 
 \copy Calendar FROM 'C:/Users/pchrk/OneDrive/Desktop/cs/2nd year/d examino/vaseis/vaseis 2021/airbnb dataset/calendar.csv' DELIMITER ',' CSV HEADER;
 \copy Geolocation FROM 'C:/Users/pchrk/OneDrive/Desktop/cs/2nd year/d examino/vaseis/vaseis 2021/airbnb dataset/geolocation.csv' DELIMITER ',' CSV HEADER;
