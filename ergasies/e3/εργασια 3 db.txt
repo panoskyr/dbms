@@ -1,0 +1,27 @@
+-- Shows the available date with one minimum night allowed and the price from loewest to highest, it is used to find
+-- the 10 cheapest avaible rooms for a one night sstay.
+-- ROWS=10
+SELECT Calendar.date AS date , Calendar.adjusted_price As price , Calendar.minimum_nights as minimum_nights
+FROM CALENDAR
+WHERE Calendar.minimum_nights=1 AND Calendar.available=TRUE
+ORDER BY Calendar.adjusted_price ASC
+LIMIT 10
+
+------------------------------------------------
+
+-- All rooms where the host's name is 'Nikos' and the reviwer_name is not 'Karen' (for obvious reasons)
+-- ROWS=1918
+SELECT Reviews.listing_id AS listing_id, Listings.host_name AS host_name, Reviews.reviewer_name AS reviewer_name
+FROM Reviews INNER JOIN Listings ON Listings.id = Reviews.listing_id
+WHERE Listings.host_name='Nikos' and Reviews.reviewer_name<>'Karen'
+GROUP BY Reviews.listing_id,Listings.host_name, Reviews.reviewer_name
+
+
+--------------------------------------------------
+
+
+-- Shows the ype and the geometry type of the rooms who are based in 'ΑΜΠΕΛΟΚΗΠΟΙ'
+-- ROWS=367
+SELECT Listings.neighbourhood_cleansed AS neighbourhood_cleansed, Geolocation.type AS type, geolocation.geometry_type AS geometry_type
+FROM neighbourhoods INNER JOIN geolocation ON Geolocation.properties_neighbourhood=Neighbourhoods.neighbourhood INNER JOIN Listings ON Neighbourhoods.neighbourhood=Listings.neighbourhood_cleansed 
+WHERE Listings.neighbourhood_cleansed='ΑΜΠΕΛΟΚΗΠΟΙ'
