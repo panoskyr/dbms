@@ -25,3 +25,13 @@ GROUP BY Reviews.listing_id,Listings.host_name, Reviews.reviewer_name
 SELECT Listings.neighbourhood_cleansed AS neighbourhood_cleansed, Geolocation.type AS type, geolocation.geometry_type AS geometry_type
 FROM neighbourhoods INNER JOIN geolocation ON Geolocation.properties_neighbourhood=Neighbourhoods.neighbourhood INNER JOIN Listings ON Neighbourhoods.neighbourhood=Listings.neighbourhood_cleansed 
 WHERE Listings.neighbourhood_cleansed='ΑΜΠΕΛΟΚΗΠΟΙ'
+
+
+---------------------------------------------------
+--avg price of listings per neighbourhood
+--ROWS=45
+select neighbourhood_cleansed, avg(price::numeric)::numeric(5,2)
+from Listings
+join Neighbourhoods
+on Neighbourhoods.neighbourhood=Listings.neighbourhood_cleansed
+group by neighbourhood_cleansed
