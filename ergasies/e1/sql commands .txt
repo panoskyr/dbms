@@ -1,0 +1,12 @@
+
+USE THIS FORMAT WITH PSQL 
+
+
+'C:/Users/pchrk/OneDrive/Desktop/cs/2nd year/d examino/vaseis/vaseis 2021/airbnb dataset/sql files/calendar.sql'
+
+find and change the client encoding
+set client_encoding to 'utf8';
+SHOW client_encoding;
+
+shows info about the table as well as primary key
+\d <table_name>
