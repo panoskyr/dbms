@@ -28,10 +28,24 @@ WHERE Listings.neighbourhood_cleansed='ΑΜΠΕΛΟΚΗΠΟΙ'
 
 
 ---------------------------------------------------
---avg price of listings per neighbourhood
+--avg price of listings per neighbourhood ascending
 --ROWS=45
-select neighbourhood_cleansed, avg(price::numeric)::numeric(5,2)
+select neighbourhood_cleansed, avg(price::numeric)::numeric(5,2) as p
 from Listings
 join Neighbourhoods
 on Neighbourhoods.neighbourhood=Listings.neighbourhood_cleansed
 group by neighbourhood_cleansed
+order by p
+
+--------------------------------------------------------
+
+--show listings per price range asc
+
+select count(price::numeric between 0 and 25 or null) as s1,
+count(price::numeric  between 25.01 and 50 or null) as s2,
+count(price::numeric  between 50.01 and 75 or null) as s3,
+count(price::numeric  between 75.01 and 100 or null) as s4,
+count(price::numeric  between 100.01 and 250 or null) as s5,
+count(price::numeric between 250.01 and 500 or null) as s6,
+count(price::numeric  between 500.01 and 7001 or null) as s7
+from Listings;
