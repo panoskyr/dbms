@@ -49,3 +49,14 @@ count(price::numeric  between 100.01 and 250 or null) as s5,
 count(price::numeric between 250.01 and 500 or null) as s6,
 count(price::numeric  between 500.01 and 7001 or null) as s7
 from Listings;
+
+
+
+
+-----------------------------------------------------------------
+-- 10 most popular hosts
+select host_id, count(host_id) as c
+from LIstings
+group by host_id
+order by c desc
+limit 10
