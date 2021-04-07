@@ -60,3 +60,17 @@ from LIstings
 group by host_id
 order by c desc
 limit 10
+
+
+-----------------------------------------------------------------
+
+
+/*
+finding vacant entries during christmas time and displaying the url so i can make reservations
+output 55015 rows
+*/
+select Listings.id, Listings.listing_url from Listings
+join Calendar 
+on Calendar.listing_id=Listings.id
+where (Calendar.date between '2020-12-20' and '2020-12-27')
+and Calendar.available=True;
