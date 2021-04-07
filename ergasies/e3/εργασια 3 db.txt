@@ -64,7 +64,7 @@ limit 10
 
 -----------------------------------------------------------------
 
-
+telika to calendar dinei tis krathseis h ta vacant?
 /*
 finding vacant entries during christmas time and displaying the url so i can make reservations
 output 55015 rows
@@ -74,3 +74,22 @@ join Calendar
 on Calendar.listing_id=Listings.id
 where (Calendar.date between '2020-12-20' and '2020-12-27')
 and Calendar.available=True;
+
+
+
+---------------------------------------------------------------------
+/*
+Finding available listings on 17-02-2021
+which provide wifi,brekfast and allow smoking
+output 120 rows
+*/
+
+
+select id,host_name, amenities from Listings
+join Calendar
+on Listings.id =Calendar.listing_id
+where Calendar.date = '2021-02-17' and Calendar.available=True
+and amenities like ('%Wifi%' )
+and amenities like('%Breakfast%') 
+and amenities like('%Smoking allowed%') 
+---------------------------------------------
