@@ -93,3 +93,30 @@ and amenities like ('%Wifi%' )
 and amenities like('%Breakfast%') 
 and amenities like('%Smoking allowed%') 
 ---------------------------------------------
+
+-- Finds the biggest listing by square feet where the the property is in the neighbourhood KOLONAKI
+-- ROWS=1
+SELECT MAX(CAST (L.square_feet AS int)) AS biggest_listing_where_neighbourhood_is_KOLONAKI
+FROM neighbourhoods N JOIN Listings L ON N.neighbourhood = L.neighbourhood_cleansed
+WHERE L.square_feet IS NOT NULL AND N.neighbourhood='ΚΟΛΩΝΑΚΙ';
+
+
+-----------------------------------------------------
+
+ME OUTER JOIN
+-- Shows the host_id of the listing with decreasing adjusted price where the price is betwwen 180 and 200$ and also shows the hosts neighbourhood
+-- (if the host_neighbourhood is null it's ok, we still display the host_id and the price)
+-- Output: 25995 rows
+SELECT L.host_id as host_id,C.adjusted_price as adjusted_price ,L.host_neighbourhood as host_neighbourhood
+FROM calendar C LEFT OUTER JOIN listings L ON C.listing_id=L.id
+WHERE C.adjusted_price<CAST(200 as money) AND C.adjusted_price>CAST(180 as money)
+ORDER BY C.adjusted_price DESC
+
+-----------------------------------------------------
+
+-- Show the the minimum amount of maximum nights avaible for any listing which host name is Emmanouil
+-- Output: 1 rows
+SELECT DISTINCT L.host_name as host_name,MIN(L.maximum_nights)as the_smallest_amount_of_the_max_nights
+FROM calendar C LEFT OUTER JOIN listings L ON C.listing_id=L.id
+WHERE c.available='true' AND host_name='Emmanouil'
+GROUP BY L.host_name
