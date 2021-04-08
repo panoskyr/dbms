@@ -1,6 +1,11 @@
--- Shows the available date with one minimum night allowed and the price from loewest to highest, it is used to find
--- the 10 cheapest avaible rooms for a one night sstay.
--- ROWS=10
+
+/*
+
+ Shows the available date with one minimum night allowed and the price from loewest to highest, it is used to find
+ the 10 cheapest avaible rooms for a one night sstay.
+output:ROWS=10
+*/
+
 SELECT Calendar.date AS date , Calendar.adjusted_price As price , Calendar.minimum_nights as minimum_nights
 FROM CALENDAR
 WHERE Calendar.minimum_nights=1 AND Calendar.available=TRUE
@@ -9,8 +14,12 @@ LIMIT 10
 
 ------------------------------------------------
 
--- All rooms where the host's name is 'Nikos' and the reviwer_name is not 'Karen' (for obvious reasons)
--- ROWS=1918
+/*
+All rooms where the host's name is 'Nikos' and the reviwer_name is not 'Karen' (for obvious reasons)
+output:ROWS=1918
+
+*/
+
 SELECT Reviews.listing_id AS listing_id, Listings.host_name AS host_name, Reviews.reviewer_name AS reviewer_name
 FROM Reviews INNER JOIN Listings ON Listings.id = Reviews.listing_id
 WHERE Listings.host_name='Nikos' and Reviews.reviewer_name<>'Karen'
@@ -19,17 +28,19 @@ GROUP BY Reviews.listing_id,Listings.host_name, Reviews.reviewer_name
 
 --------------------------------------------------
 
+/*Shows the ype and the geometry type of the rooms who are based in 'ΑΜΠΕΛΟΚΗΠΟΙ'
+output:ROWS=367
+*/
 
--- Shows the ype and the geometry type of the rooms who are based in 'ΑΜΠΕΛΟΚΗΠΟΙ'
--- ROWS=367
 SELECT Listings.neighbourhood_cleansed AS neighbourhood_cleansed, Geolocation.type AS type, geolocation.geometry_type AS geometry_type
 FROM neighbourhoods INNER JOIN geolocation ON Geolocation.properties_neighbourhood=Neighbourhoods.neighbourhood INNER JOIN Listings ON Neighbourhoods.neighbourhood=Listings.neighbourhood_cleansed 
 WHERE Listings.neighbourhood_cleansed='ΑΜΠΕΛΟΚΗΠΟΙ'
 
 
 ---------------------------------------------------
---avg price of listings per neighbourhood ascending
---ROWS=45
+/*avg price of listings per neighbourhood ascending
+output :ROWS=45
+*/
 select neighbourhood_cleansed, avg(price::numeric)::numeric(5,2) as p
 from Listings
 join Neighbourhoods
@@ -38,8 +49,10 @@ group by neighbourhood_cleansed
 order by p
 
 --------------------------------------------------------
+/*
+show listings per price range asc
+ */
 
---show listings per price range asc
 
 select count(price::numeric between 0 and 25 or null) as s1,
 count(price::numeric  between 25.01 and 50 or null) as s2,
@@ -54,7 +67,10 @@ from Listings;
 
 
 -----------------------------------------------------------------
--- 10 most popular hosts
+/*
+10 most popular hosts
+
+*/
 select host_id, count(host_id) as c
 from LIstings
 group by host_id
@@ -64,7 +80,6 @@ limit 10
 
 -----------------------------------------------------------------
 
-telika to calendar dinei tis krathseis h ta vacant?
 /*
 finding vacant entries during christmas time and displaying the url so i can make reservations
 output 55015 rows
@@ -124,19 +139,22 @@ select * from Listings
 left outer join Reviews 
 on Listings.id=Reviews.listing_id
 where Reviews.id is null
-
-
-
-
-
-
-
+----------------------------------------------------------
+/*
+find all hosts that are superhosts and have more than 3 places listed
+output:327
+*/
+select  distinct host_id, host_url 
+from Listings
+where host_listings_count>3 and host_is_superhost is True
+order by host_id asc
 
 
 -----------------------------------------------------
 
--- Show the the minimum amount of maximum nights avaible for any listing which host name is Emmanouil
--- Output: 1 rows
+/*Show the the minimum amount of maximum nights avaible for any listing which host name is Emmanouil
+ Output: 1 rows
+*/
 SELECT DISTINCT L.host_name as host_name,MIN(L.maximum_nights)as the_smallest_amount_of_the_max_nights
 FROM calendar C LEFT OUTER JOIN listings L ON C.listing_id=L.id
 WHERE c.available='true' AND host_name='Emmanouil'
