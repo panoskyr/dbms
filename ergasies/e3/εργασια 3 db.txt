@@ -113,6 +113,27 @@ WHERE C.adjusted_price<CAST(200 as money) AND C.adjusted_price>CAST(180 as money
 ORDER BY C.adjusted_price DESC
 
 -----------------------------------------------------
+/*
+
+find the appartments that have not been reviewed yet
+
+OUTPUT:2559 rows
+*/
+
+select * from Listings
+left outer join Reviews 
+on Listings.id=Reviews.listing_id
+where Reviews.id is null
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------
 
 -- Show the the minimum amount of maximum nights avaible for any listing which host name is Emmanouil
 -- Output: 1 rows
