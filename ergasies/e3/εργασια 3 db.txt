@@ -117,11 +117,14 @@ WHERE L.square_feet IS NOT NULL AND N.neighbourhood='ΚΟΛΩΝΑΚΙ';
 
 
 -----------------------------------------------------
-
+/*
 ME OUTER JOIN
 -- Shows the host_id of the listing with decreasing adjusted price where the price is betwwen 180 and 200$ and also shows the hosts neighbourhood
 -- (if the host_neighbourhood is null it's ok, we still display the host_id and the price)
 -- Output: 25995 rows
+*/
+
+
 SELECT L.host_id as host_id,C.adjusted_price as adjusted_price ,L.host_neighbourhood as host_neighbourhood
 FROM calendar C LEFT OUTER JOIN listings L ON C.listing_id=L.id
 WHERE C.adjusted_price<CAST(200 as money) AND C.adjusted_price>CAST(180 as money)

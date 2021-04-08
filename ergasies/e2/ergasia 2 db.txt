@@ -3,4 +3,4 @@
 Endpoint:adb21.postgres.database.azure.com
 Username:examiner@adb21
 Password:examiner_pass
-Database:aueb_db
+Database:aueb_db (maintenance db :postgres)
