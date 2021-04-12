@@ -15,7 +15,7 @@ LIMIT 10
 ------------------------------------------------
 
 /*
-All listings where the host's name is 'Nikos' and the reviwer_name is not 'Karen' (for obvious reasons)
+All listings where the host's name is 'Nikos' and the reviwer_name is not 'Karen' 
 output:ROWS=1918
 
 */
@@ -24,18 +24,6 @@ SELECT Reviews.listing_id AS listing_id, Listings.host_name AS host_name, Review
 FROM Reviews INNER JOIN Listings ON Listings.id = Reviews.listing_id
 WHERE Listings.host_name='Nikos' and Reviews.reviewer_name<>'Karen'
 GROUP BY Reviews.listing_id,Listings.host_name, Reviews.reviewer_name
-
-
---------------------------------------------------
-
-/*Shows the ype and the geometry type of the rooms who are based in 'ΑΜΠΕΛΟΚΗΠΟΙ'
-output:ROWS=367
-*/
-
-SELECT Listings.neighbourhood_cleansed AS neighbourhood_cleansed, Geolocation.type AS type, geolocation.geometry_type AS geometry_type
-FROM neighbourhoods INNER JOIN geolocation ON Geolocation.properties_neighbourhood=Neighbourhoods.neighbourhood INNER JOIN Listings ON Neighbourhoods.neighbourhood=Listings.neighbourhood_cleansed 
-WHERE Listings.neighbourhood_cleansed='ΑΜΠΕΛΟΚΗΠΟΙ'
-
 
 ---------------------------------------------------
 /*avg price of listings per neighbourhood ascending
