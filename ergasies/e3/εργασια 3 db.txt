@@ -15,7 +15,7 @@ LIMIT 10
 ------------------------------------------------
 
 /*
-All rooms where the host's name is 'Nikos' and the reviwer_name is not 'Karen' (for obvious reasons)
+All listings where the host's name is 'Nikos' and the reviwer_name is not 'Karen' (for obvious reasons)
 output:ROWS=1918
 
 */
