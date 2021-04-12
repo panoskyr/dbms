@@ -120,7 +120,7 @@ WHERE L.square_feet IS NOT NULL AND N.neighbourhood='ΚΟΛΩΝΑΚΙ';
 -----------------------------------------------------
 /*
 ME OUTER JOIN
--- Shows the host_id of the listing with decreasing adjusted price where the price is betwwen 180 and 200$ and also shows the hosts neighbourhood
+-- Shows the host_id of the listing, the neighbourhood and the adjusted_price where the price is between 180-200$ from most to least expensive  
 -- (if the host_neighbourhood is null it's ok, we still display the host_id and the price)
 -- Output: 25995 rows
 */
