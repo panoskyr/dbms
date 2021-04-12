@@ -51,6 +51,7 @@ order by p
 --------------------------------------------------------
 /*
 show listings per price range asc
+output :ROWS=1
  */
 
 
