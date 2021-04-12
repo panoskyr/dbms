@@ -110,7 +110,7 @@ and amenities like('%Breakfast%')
 and amenities like('%Smoking allowed%') 
 ---------------------------------------------
 
--- Finds the biggest listing by square feet where the the property is in the neighbourhood KOLONAKI
+-- Finds the size of the biggest listing by square feet where the the property is in the neighbourhood KOLONAKI
 -- ROWS=1
 SELECT MAX(CAST (L.square_feet AS int)) AS biggest_listing_where_neighbourhood_is_KOLONAKI
 FROM neighbourhoods N JOIN Listings L ON N.neighbourhood = L.neighbourhood_cleansed
