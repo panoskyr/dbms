@@ -69,8 +69,8 @@ from Listings;
 
 -----------------------------------------------------------------
 /*
-10 most popular hosts
-
+10 most popular hosts(?)
+output :ROWS=10
 */
 select host_id, count(host_id) as c
 from LIstings
