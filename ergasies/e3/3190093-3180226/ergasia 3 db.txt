@@ -1,0 +1,6 @@
+ΚΟΤΣΙΦΟΣ ΓΕΩΡΓΙΟΣ-3190093
+ΚΥΡΜΠΑΤΣΟΣ ΠΑΝΑΓΙΩΤΗΣ-3180226
+Endpoint:adb21.postgres.database.azure.com
+Username:examiner@adb21
+Password:examiner_pass
+Database:aueb_db (maintenance db :postgres)
