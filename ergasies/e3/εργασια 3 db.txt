@@ -10,7 +10,7 @@ SELECT Calendar.date AS date , Calendar.adjusted_price As price , Calendar.minim
 FROM CALENDAR
 WHERE Calendar.minimum_nights=1 AND Calendar.available=TRUE
 ORDER BY Calendar.adjusted_price ASC
-LIMIT 10
+LIMIT 10;
 
 ------------------------------------------------
 
@@ -23,7 +23,7 @@ output:ROWS=1918
 SELECT Reviews.listing_id AS listing_id, Listings.host_name AS host_name, Reviews.reviewer_name AS reviewer_name
 FROM Reviews INNER JOIN Listings ON Listings.id = Reviews.listing_id
 WHERE Listings.host_name='Nikos' and Reviews.reviewer_name<>'Karen'
-GROUP BY Reviews.listing_id,Listings.host_name, Reviews.reviewer_name
+GROUP BY Reviews.listing_id,Listings.host_name, Reviews.reviewer_name;
 
 ---------------------------------------------------
 /*avg price of listings per neighbourhood ascending
@@ -34,7 +34,7 @@ from Listings
 join Neighbourhoods
 on Neighbourhoods.neighbourhood=Listings.neighbourhood_cleansed
 group by neighbourhood_cleansed
-order by p
+order by p;
 
 --------------------------------------------------------
 /*
@@ -64,7 +64,7 @@ select host_id, count(host_id) as c
 from LIstings
 group by host_id
 order by c desc
-limit 10
+limit 10;
 
 
 -----------------------------------------------------------------
@@ -95,7 +95,7 @@ on Listings.id =Calendar.listing_id
 where Calendar.date = '2021-02-17' and Calendar.available=True
 and amenities like ('%Wifi%' )
 and amenities like('%Breakfast%') 
-and amenities like('%Smoking allowed%') 
+and amenities like('%Smoking allowed%');
 ---------------------------------------------
 
 -- Finds the size of the biggest listing by square feet where the the property is in the neighbourhood KOLONAKI
@@ -117,7 +117,7 @@ ME OUTER JOIN
 SELECT L.host_id as host_id,C.adjusted_price as adjusted_price ,L.host_neighbourhood as host_neighbourhood
 FROM calendar C LEFT OUTER JOIN listings L ON C.listing_id=L.id
 WHERE C.adjusted_price<CAST(200 as money) AND C.adjusted_price>CAST(180 as money)
-ORDER BY C.adjusted_price DESC
+ORDER BY C.adjusted_price DESC;
 
 -----------------------------------------------------
 /*
@@ -130,7 +130,7 @@ OUTPUT:2559 rows
 select * from Listings
 left outer join Reviews 
 on Listings.id=Reviews.listing_id
-where Reviews.id is null
+where Reviews.id is null;
 ----------------------------------------------------------
 /*
 find all hosts that are superhosts and have more than 3 places listed
@@ -139,7 +139,7 @@ output:327
 select  distinct host_id, host_url 
 from Listings
 where host_listings_count>3 and host_is_superhost is True
-order by host_id asc
+order by host_id asc;
 
 
 -----------------------------------------------------
@@ -150,4 +150,4 @@ order by host_id asc
 SELECT DISTINCT L.host_name as host_name,MIN(L.maximum_nights)as the_smallest_amount_of_the_max_nights
 FROM calendar C LEFT OUTER JOIN listings L ON C.listing_id=L.id
 WHERE c.available='true' AND host_name='Emmanouil'
-GROUP BY L.host_name
+GROUP BY L.host_name;
