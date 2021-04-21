@@ -1,6 +1,6 @@
 -- dhmiourgia pinaka Room
 CREATE TABLE Room
-AS (SELECT listing_id, accommodates, bathrooms, bedrooms, beds, bed_type, 
+AS (SELECT DISTINCT id AS listing_id, accommodates, bathrooms, bedrooms, beds, bed_type, 
 	 amenities, square_feet, price, weekly_price, monthly_price, security_deposit
 	FROM listings);
 

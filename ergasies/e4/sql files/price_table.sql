@@ -1,9 +1,21 @@
 -- dhmiourgia pinaka Price
 CREATE TABLE Price
-AS (SELECT listing_id, price, weekly_price, monthly_price, security_deposit, cleaning_fee,
-	guests_included, extra_people, minimum_nights, maximum_nights,
-	minimum_minimum_nights, maximum_minimum_nights, minimum_maximum_nights,
-	maximum_maximum_nights, minimum_nights_avg_ntm, maximum_nights_avg_ntm
+AS (SELECT DISTINCT id AS listing_id, 
+price, 
+weekly_price,
+monthly_price,
+security_deposit,
+cleaning_fee,
+guests_included,
+extra_people,
+minimum_nights,
+maximum_nights,
+minimum_minimum_nights,
+maximum_minimum_nights,
+minimum_maximum_nights,
+maximum_maximum_nights, 
+minimum_nights_avg_ntm,
+maximum_nights_avg_ntm
 	FROM listings);
 
 -- diagrafh pedion apo ton Listing
@@ -28,7 +40,10 @@ DROP COLUMN maximum_nights_avg_ntm;
 ALTER TABLE Price
 ADD FOREIGN KEY (listing_id) REFERENCES Listings(id);
 
--- ta pedia price ta eixame typoy money kai ta metatrepoume se typo varchar kai epeita se numeric
+/*
+ta pedia price ta eixame typoy money kai ta metatrepoume
+ se typo varchar kai epeita se numeric
+*/
 ALTER TABLE Price
 alter column price TYPE varchar,
 alter column weekly_price TYPE varchar,
