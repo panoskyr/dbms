@@ -81,4 +81,4 @@ alter column weekly_price TYPE numeric(10,2) using weekly_price::numeric(10,2),
 alter column monthly_price TYPE numeric(10,2) using monthly_price::numeric(10,2),
 alter column security_deposit TYPE numeric(10,2) using security_deposit::numeric(10,2),
 alter column cleaning_fee TYPE numeric(10,2) using cleaning_fee::numeric(10,2),
-alter column extra_people TYPE numeric(10,0) using extra_people::numeric(10,2);
+alter column extra_people TYPE numeric(10,2) using extra_people::numeric(10,2);
