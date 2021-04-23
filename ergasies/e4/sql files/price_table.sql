@@ -1,4 +1,3 @@
-
 -- dhmiourgia pinaka Price
 CREATE TABLE Price
 AS (SELECT DISTINCT id AS listing_id, 
@@ -59,12 +58,12 @@ alter column cleaning_fee TYPE varchar,
 alter column extra_people TYPE varchar;
 
 -- Remove the "$" from the VARCHAR columns 
-UPDATE "Price" SET price = REPLACE(price,'$','') WHERE price IS NOT NULL;
-UPDATE "Price" SET weekly_price = REPLACE(weekly_price,'$','') WHERE weekly_price IS NOT NULL;
-UPDATE "Price" SET monthly_price = REPLACE(monthly_price,'$','') WHERE monthly_price IS NOT NULL;
-UPDATE "Price" SET security_deposit = REPLACE(security_deposit,'$','') WHERE security_deposit IS NOT NULL;
-UPDATE "Price" SET cleaning_fee = REPLACE(cleaning_fee,'$','') WHERE cleaning_fee IS NOT NULL;
-UPDATE "Price" SET extra_people = REPLACE(extra_people,'$','') WHERE extra_people IS NOT NULL;
+UPDATE Price SET price = REPLACE(price,'$','') WHERE price IS NOT NULL;
+UPDATE Price SET weekly_price = REPLACE(weekly_price,'$','') WHERE weekly_price IS NOT NULL;
+UPDATE Price SET monthly_price = REPLACE(monthly_price,'$','') WHERE monthly_price IS NOT NULL;
+UPDATE Price SET security_deposit = REPLACE(security_deposit,'$','') WHERE security_deposit IS NOT NULL;
+UPDATE Price SET cleaning_fee = REPLACE(cleaning_fee,'$','') WHERE cleaning_fee IS NOT NULL;
+UPDATE Price SET extra_people = REPLACE(extra_people,'$','') WHERE extra_people IS NOT NULL;
 
 UPDATE  Price
 SET 
