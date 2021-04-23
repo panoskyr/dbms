@@ -3,17 +3,17 @@
 /*PRICE*/
 ALTER TABLE Calendar
 alter column price TYPE varchar,
-alter column adjustable_price TYPE varchar;
+alter column adjusted_price TYPE varchar;
 
 UPDATE  Calendar
 SET 
 price = REPLACE(price,'$',''),
-adjustable_price = REPLACE(price,'$','');
+adjusted_price = REPLACE(price,'$','');
 
 UPDATE  Calendar
 SET 
 price = REPLACE(price,',',''),
-adjustable_price = REPLACE(price,',','');
+adjusted_price = REPLACE(price,',','');
 
 ALTER TABLE Calendar 
 alter column price TYPE numeric(18,0) 
