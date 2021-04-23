@@ -42,8 +42,13 @@ ALTER TABLE Price
 ADD FOREIGN KEY (listing_id) REFERENCES Listings(id);
 
 /*
-ta pedia price ta eixame typoy money kai ta metatrepoume
- se typo varchar kai epeita se numeric
+because there are no decimal values 
+select price from Listings where price::numeric::float8<>FLOOR(price::numeric::float8);
+returns 0 rows
+*/
+
+/*
+metatrepoume ta pedia price-->varchar--> numeric
 */
 ALTER TABLE Price
 alter column price TYPE varchar,
@@ -53,15 +58,13 @@ alter column security_deposit TYPE varchar,
 alter column cleaning_fee TYPE varchar,
 alter column extra_people TYPE varchar;
 
-
-UPDATE  Price
-SET 
-price = REPLACE(price,'$',''),
-weekly_price = REPLACE(weekly_price,'$',''),
-monthly_price = REPLACE(monthly_price,'$',''),
-security_deposit = REPLACE(security_deposit,'$',''),
-cleaning_fee = REPLACE(cleaning_fee,'$',''),
-extra_people = REPLACE(cleaning_fee,'$','');
+-- Remove the "$" from the VARCHAR columns 
+UPDATE "Price" SET price = REPLACE(price,'$','') WHERE price IS NOT NULL;
+UPDATE "Price" SET weekly_price = REPLACE(weekly_price,'$','') WHERE weekly_price IS NOT NULL;
+UPDATE "Price" SET monthly_price = REPLACE(monthly_price,'$','') WHERE monthly_price IS NOT NULL;
+UPDATE "Price" SET security_deposit = REPLACE(security_deposit,'$','') WHERE security_deposit IS NOT NULL;
+UPDATE "Price" SET cleaning_fee = REPLACE(cleaning_fee,'$','') WHERE cleaning_fee IS NOT NULL;
+UPDATE "Price" SET extra_people = REPLACE(extra_people,'$','') WHERE extra_people IS NOT NULL;
 
 UPDATE  Price
 SET 
@@ -74,9 +77,9 @@ extra_people = REPLACE(cleaning_fee,',','');
 
 
 ALTER TABLE Price
-alter column price TYPE numeric(18,0) using price::numeric,
-alter column weekly_price TYPE numeric(18,0) using weekly_price::numeric,
-alter column monthly_price TYPE numeric(18,0) using monthly_price::numeric,
-alter column security_deposit TYPE numeric(18,0) using security_deposit::numeric,
-alter column cleaning_fee TYPE numeric(18,0) using cleaning_fee::numeric,
-alter column extra_people TYPE numeric(18,0) using extra_people::numeric;
+alter column price TYPE numeric(10,2) using price::numeric(10,2),
+alter column weekly_price TYPE numeric(10,2) using weekly_price::numeric(10,2),
+alter column monthly_price TYPE numeric(10,2) using monthly_price::numeric(10,2),
+alter column security_deposit TYPE numeric(10,2) using security_deposit::numeric(10,2),
+alter column cleaning_fee TYPE numeric(10,2) using cleaning_fee::numeric(10,2),
+alter column extra_people TYPE numeric(10,0) using extra_people::numeric(10,2);
