@@ -15,8 +15,6 @@ SET
 price = REPLACE(price,',',''),
 adjustable_price = REPLACE(price,',','');
 
-
-/*mhpvs adjusted??*/
 ALTER TABLE Calendar 
 alter column price TYPE numeric(18,0) 
 using price::numeric;
