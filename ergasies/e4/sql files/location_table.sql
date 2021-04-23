@@ -13,7 +13,7 @@ ADD FOREIGN KEY (listing_id) REFERENCES Listings(id);
 
 -- diagrafh FK tou Listing me ton neighbourhood
 ALTER TABLE Listings
-DROP FOREIGN KEY listings_neighbourhood_cleansed_fkey;
+DROP CONSTRAINT Listings_neighbourhood_cleansed_fkey;
 
 -- prosthesh FK ston Location me ton neighbourhood
 ALTER TABLE Location
@@ -29,7 +29,7 @@ DROP COLUMN street,
 DROP COLUMN neighbourhood,
 DROP COLUMN neighbourhood_cleansed,
 DROP COLUMN city,
-DROP COLUMN state;
+DROP COLUMN state,
 DROP COLUMN zipcode,
 DROP COLUMN market,
 DROP COLUMN smart_location,
