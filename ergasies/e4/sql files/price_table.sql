@@ -1,3 +1,4 @@
+
 -- dhmiourgia pinaka Price
 CREATE TABLE Price
 AS (SELECT DISTINCT id AS listing_id, 
@@ -24,12 +25,12 @@ DROP COLUMN price,
 DROP COLUMN weekly_price,
 DROP COLUMN monthly_price,
 DROP COLUMN security_deposit,
-DROP COLUMN cleaning_fee;
+DROP COLUMN cleaning_fee,
 DROP COLUMN guests_included,
 DROP COLUMN extra_people,
 DROP COLUMN minimum_nights,
 DROP COLUMN maximum_nights,
-DROP COLUMN minimum_minimum_nights;
+DROP COLUMN minimum_minimum_nights,
 DROP COLUMN maximum_minimum_nights,
 DROP COLUMN minimum_maximum_nights,
 DROP COLUMN maximum_maximum_nights,

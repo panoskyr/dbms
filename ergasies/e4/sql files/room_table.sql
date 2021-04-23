@@ -12,11 +12,7 @@ DROP COLUMN bedrooms,
 DROP COLUMN beds,
 DROP COLUMN bed_type,
 DROP COLUMN amenities,
-DROP COLUMN square_feet,
-DROP COLUMN price,
-DROP COLUMN weekly_price,
-DROP COLUMN monthly_price,
-DROP COLUMN security_deposit;
+DROP COLUMN square_feet;
 
 -- prosthesh FK
 ALTER TABLE Room

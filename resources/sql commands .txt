@@ -1,0 +1,53 @@
+
+USE THIS FORMAT WITH PSQL 
+
+
+'C:/Users/pchrk/OneDrive/Desktop/cs/2nd year/d examino/vaseis/vaseis 2021/airbnb dataset/sql files/calendar.sql'
+
+'C:/Users/pchrk/OneDrive/Desktop/cs/2nd year/d examino/vaseis/vaseis 2021/ergasies/ergasies/e3/3190093-3180226/simple_queries.sql'
+
+
+
+find and change the client encoding
+set client_encoding to 'utf8';
+SHOW client_encoding;
+
+shows info about the table as well as primary key
+\d <table_name>
+
+To work around the Float precision problem, Postgres provides the Numeric type,
+ and its alias, Decimal. These types can store numbers with a very large number
+ of digits, and yet perform calculations exactly.
+
+CREATE DATABASE ask4 WITH TEMPLATE aueb2t OWNER postgres;
+
+/* apla disconnect from server thn sugkekrimenh db kai mena trexv me query tool*/
+SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity 
+WHERE pg_stat_activity.datname = 'aueb2t' AND pid <> pg_backend_pid();
+
+
+
+/*
+ask4
+
+host 
+ALTER TABLE
+
+Query returned successfully in 1 secs 411 msec.
+
+ερωτηση 1)επηρεαζει αν κανεις πρωτα drop kai μετα συνδεση PK  η οχι/?
+
+room table
+χρειαζεται distindt id? νμζ πως ειναι 1-1 σχεση το listing id με το room
+εκανα την αλλαγη και το προσθεσα γιατι αλλιως δεν ετρεχε
+ALTER TABLE
+
+Query returned successfully in 743 msec.
+
+
+ερωτηση 2)αφου στο 2 εχω διαγράψει στηλες οπως price πως θα τις χρησιμοποιησω στο 3?
+
+*/
+
+
+/*running \d+ <tablename> on psql we get the fkey*/
