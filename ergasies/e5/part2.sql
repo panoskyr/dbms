@@ -1,3 +1,7 @@
+/* Ypothetoume oti doulevoume stous kanonikous pinakes kai oxi sta antigrafa toys p.x anti gia "room2" (opoy einai o pinakas poy kaname tis allages sthn ergasia 5)
+valame "room", anti gia "listing2" (opoy einai o pinakas poy kaname tis allages sthn ergasia 4) valame "listing"...*/
+
+
 --Shows the id of the listing where the guests allowed are 8 and the listing has more than 4 beds so
 --everyone has a bed(if we suppose one bed can fit 2 people)
 --Rows:20
