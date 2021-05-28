@@ -31,6 +31,9 @@ both listings count and total listings count  added one
 
 */
 
+
+
+
 CREATE OR REPLACE FUNCTION removelistings()
 	RETURNS TRIGGER AS
 	$$
@@ -150,6 +153,48 @@ delete from listings where id=10595;
 
 */
 
+
+
+/*
+*
+*trigger for reviews. when adding a review we increase the number_of_reviews column in listings
+*
+*
+*/
+CREATE OR REPLACE FUNCTION addReviewTrigger()
+	RETURNS TRIGGER AS
+	$$
+	BEGIN
+		UPDATE listings
+		SET number_of_reviews=number_of_reviews+1
+		WHERE id=NEW.listing_id;
+		return null;
+
+	END;
+	$$ LANGUAGE plpgsql;
+
+create trigger addReviewTrigger
+AFTER INSERT ON reviews
+FOR EACH ROW
+EXECUTE PROCEDURE addReviewTrigger();
+
+
+CREATE OR REPLACE FUNCTION delReviewTrigger()
+	RETURNS TRIGGER AS
+	$$
+	BEGIN
+		UPDATE listings
+		SET number_of_reviews=number_of_reviews-1
+		WHERE id=OLD.listing_id;
+		return null;
+
+	END;
+	$$ LANGUAGE plpgsql;
+
+create trigger delReviewTrigger
+AFTER DELETE ON reviews
+FOR EACH ROW
+EXECUTE PROCEDURE delReviewTrigger();
 
 
 
