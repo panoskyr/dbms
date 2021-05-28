@@ -20,6 +20,17 @@ AFTER INSERT ON listings
 FOR EACH ROW
 EXECUTE PROCEDURE addlistings();
 
+
+
+
+/*
+insert listing
+insert into listings(id,host_id) values (789456,37177)
+select * from host where id=37177
+both listings count and total listings count  added one
+
+*/
+
 CREATE OR REPLACE FUNCTION removelistings()
 	RETURNS TRIGGER AS
 	$$
@@ -45,7 +56,16 @@ EXECUTE PROCEDURE removelistings();
 
 
 /*
+ERROR:  syntax error at or near "-"
+LINE 8:   SET listings_count=listings_count -1
+                                            ^
+SQL state: 42601
+Character: 188
+petaei ayto to error otan meivnv kai to listings_count sthn trigger function.exeis idea giati?
+
+
 select * from listings where id=10595;select * from host where id=37177;
+update all fk to cascade
 
 update the constraint
 ALTER TABLE listings_summary drop constraint listings_summary_id_fkey;
@@ -56,6 +76,8 @@ foreign key(id)
 references listings (id)
 ON UPDATE CASCADE 
 ON DELETE CASCADE;
+
+ALTER TABLE calendar drop constraint calendar_listing_id_fkey1;
 
 ALTER TABLE calendar drop constraint calendar_listing_id_fkey;
 ALTER TABLE calendar 
@@ -85,6 +107,40 @@ ALTER TABLE reviews_summary drop constraint reviews_summary_listing_id_fkey;
 ALTER TABLE reviews_summary
 add constraint reviews_summary_listing_id_fkey
 foreign key(listing_id)
+references listings(id)
+on update cascade
+on delete cascade;
+
+ALTER TABLE room drop constraint room_listing_id_fkey;
+ALTER TABLE room
+add constraint room_listing_id_fkey
+foreign key(listing_id)
+references listings(id)
+on update cascade
+on delete cascade;
+
+ALTER TABLE price drop constraint price_listing_id_fkey;
+ALTER TABLE price
+add constraint price_listing_id_fkey
+foreign key(listing_id)
+references listings(id)
+on update cascade
+on delete cascade;
+
+ALTER TABLE location drop constraint location_listing_id_fkey;
+ALTER TABLE location
+add constraint location_listing_id_fkey
+foreign key(listing_id)
+references listings(id)
+on update cascade
+on delete cascade;
+
+
+
+ALTER TABLE "Room_Amenity_Connection" drop constraint "Room_Amenity_Connection_room_id_fkey";
+ALTER TABLE "Room_Amenity_Connection"
+add constraint Room_Amenity_Connection_room_id_fkey
+foreign key(room_id)
 references listings(id)
 on update cascade
 on delete cascade;
