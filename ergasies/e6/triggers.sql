@@ -5,9 +5,6 @@ CREATE OR REPLACE FUNCTION addlistings()
 		UPDATE host
 		SET listings_count=listings_count+1
 		WHERE id=NEW.host_id;
-		UPDATE host
-		SET total_listings_count=total_listings_count+1
-		WHERE id=NEW.host_id;
 		return null;
 
 		
@@ -40,8 +37,6 @@ CREATE OR REPLACE FUNCTION removelistings()
 	BEGIN
 		UPDATE host
 		SET listings_count=listings_count-1
-		WHERE id=OLD.host_id;
-		SET total_listings_count=total_listings_count-1
 		WHERE id=OLD.host_id;
 		return null;
 
