@@ -1,0 +1,326 @@
+// Treksame thn entolh VACUUM ANALYZE stous pinakes kai kaname set enable_seqscan=off; otan dokimazame ta evrethria
+-------------------------------------------------------------------------------------------------------------------------------
+QUERY 1 //h sthlh "host_id" onomazetai sketo "id" ston pinaka host!!
+EXPLAIN ANALYZE
+SELECT "host".id, COUNT(*) FROM "listing2", "host" WHERE
+"host".id="listing2".host_id GROUP BY "host".id;
+
+BEFORE ADDING INDEX
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+HashAggregate  (cost=3275.70..3339.33 rows=6363 width=12) (actual time=17.636..18.714 rows=6363 loops=1)
+    Group Key: host.id
+    ->  Hash Join  (cost=255.26..3217.99 rows=11541 width=4) (actual time=1.692..14.728 rows=11541 loops=1)
+        Hash Cond: (listing2.host_id = host.id)
+        ->  Seq Scan on listing2  (cost=0.00..2932.41 rows=11541 width=4) (actual time=0.020..9.943 rows=11541 loops=1)
+        ->  Hash  (cost=175.73..175.73 rows=6363 width=4) (actual time=1.627..1.627 rows=6363 loops=1)
+              Buckets: 8192  Batches: 1  Memory Usage: 288kB
+              ->  Index Only Scan using host_pkey on host  (cost=0.28..175.73 rows=6363 width=4) (actual time=0.015..0.718 rows=6363 loops=1)
+                    Heap Fetches: 0
+Planning Time: 59.048 ms
+Execution Time: 19.430 ms
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+AFTER ADDING INDEX
+---------------------------------------------------------------------------------------------------------------------------------
+
+HashAggregate  (cost=652.69..716.32 rows=6363 width=12) (actual time=7.145..8.024 rows=6363 loops=1)
+  Group Key: host.id
+  ->  Hash Join  (cost=255.55..594.98 rows=11541 width=4) (actual time=1.613..4.866 rows=11541 loops=1)
+        Hash Cond: (listing2.host_id = host.id)
+        ->  Index Only Scan using host_id_index_for_listing on listing2  (cost=0.29..309.40 rows=11541 width=4) (actual time=0.009..1.148 rows=11541 loops=1)
+              Heap Fetches: 0
+        ->  Hash  (cost=175.73..175.73 rows=6363 width=4) (actual time=1.557..1.557 rows=6363 loops=1)
+              Buckets: 8192  Batches: 1  Memory Usage: 288kB
+              ->  Index Only Scan using host_pkey on host  (cost=0.28..175.73 rows=6363 width=4) (actual time=0.014..0.649 rows=6363 loops=1)
+                    Heap Fetches: 0
+Planning Time: 0.256 ms
+Execution Time: 8.594 ms
+
+ -----------------------------------------------------------------------------------------------------------------------------
+/* Query 1: w/out index: 19.430 ms, w/index: 8.594 ms */
+
+------------------------------------------------------------------------------------------------------------------------------
+
+******************************************************************************************************************************
+
+QUERY 2 
+EXPLAIN ANALYZE
+SELECT id, price FROM "listing2", "price" WHERE guests_included > 5
+AND price > 40;
+
+BEFORE ADDING INDEX
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Nested Loop  (cost=0.29..19383.97 rows=1500330 width=8) (actual time=0.059..307.879 rows=2469774 loops=1)
+  ->  Index Only Scan using listings2_pkey on listing2  (cost=0.29..309.40 rows=11541 width=4) (actual time=0.022..1.616 rows=11541 loops=1)
+        Heap Fetches: 0
+  ->  Materialize  (cost=0.00..320.76 rows=130 width=4) (actual time=0.000..0.008 rows=214 loops=11541)
+        ->  Seq Scan on price  (cost=0.00..320.12 rows=130 width=4) (actual time=0.033..1.614 rows=214 loops=1)
+              Filter: ((guests_included > 5) AND (price > '40'::numeric))
+              Rows Removed by Filter: 11327
+Planning Time: 0.158 ms
+Execution Time: 361.189 ms
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+AFTER ADDING INDEX
+---------------------------------------------------------------------------------------------------------------------------------
+
+Nested Loop  (cost=0.57..19071.67 rows=1500330 width=8) (actual time=0.055..306.417 rows=2469774 loops=1)
+  ->  Index Only Scan using listings2_pkey on listing2  (cost=0.29..309.40 rows=11541 width=4) (actual time=0.022..1.645 rows=11541 loops=1)
+        Heap Fetches: 0
+  ->  Materialize  (cost=0.29..8.46 rows=130 width=4) (actual time=0.000..0.008 rows=214 loops=11541)
+        ->  Index Only Scan using guests_included_price_index_for_price on price  (cost=0.29..7.82 rows=130 width=4) (actual time=0.029..0.064 rows=214 loops=1)
+              Index Cond: ((guests_included > 5) AND (price > '40'::numeric))
+              Heap Fetches: 0
+Planning Time: 0.193 ms
+Execution Time: 362.375 ms
+
+-----------------------------------------------------------------------------------------------------------------------------
+/* Query 2: w/out index: 361.189 ms, w/index: 362.375 ms */
+
+Kaname index tis sthles toy where. Den voithaei ean valoyme index sto price dioti emfanizoyme kai grammes apo ton pinaka listing.Ean den emfanizame to id
+apo ton listing tote h taxythta me index tha htan poly pio megalh.
+------------------------------------------------------------------------------------------------------------------------------
+
+
+******************************************************************************************************************************
+
+QUERY 3 
+EXPLAIN ANALYZE
+SELECT price.listing_id,beds, guests_included
+FROM room2 INNER JOIN price ON price.listing_id = room2.listing_id
+WHERE guests_included=8 and beds>4;
+
+BEFORE ADDING INDEX
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Nested Loop  (cost=0.29..491.82 rows=2 width=12) (actual time=0.207..1.485 rows=20 loops=1)
+  ->  Seq Scan on price  (cost=0.00..291.26 rows=28 width=8) (actual time=0.195..1.385 rows=28 loops=1)
+        Filter: (guests_included = 8)
+        Rows Removed by Filter: 11513
+  ->  Index Scan using room2_pkey on room2  (cost=0.29..7.16 rows=1 width=8) (actual time=0.003..0.003 rows=1 loops=28)
+        Index Cond: (listing_id = price.listing_id)
+        Filter: (beds > 4)
+        Rows Removed by Filter: 0
+Planning Time: 24.058 ms
+Execution Time: 1.516 ms
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+AFTER ADDING INDEX
+---------------------------------------------------------------------------------------------------------------------------------
+
+Nested Loop  (cost=0.57..271.44 rows=2 width=12) (actual time=0.019..0.139 rows=20 loops=1)
+  ->  Index Scan using guests_included_index_for_price on price  (cost=0.29..70.88 rows=28 width=8) (actual time=0.009..0.035 rows=28 loops=1)
+        Index Cond: (guests_included = 8)
+  ->  Index Scan using room2_pkey on room2  (cost=0.29..7.16 rows=1 width=8) (actual time=0.003..0.003 rows=1 loops=28)
+        Index Cond: (listing_id = price.listing_id)
+        Filter: (beds > 4)
+        Rows Removed by Filter: 0
+Planning Time: 0.255 ms
+Execution Time: 0.164 ms
+
+-----------------------------------------------------------------------------------------------------------------------------
+/* Query 3: w/out index: 1.516 ms, w/index: 0.164 ms */
+
+Kaname index tis sthles toy where.
+------------------------------------------------------------------------------------------------------------------------------
+
+******************************************************************************************************************************
+
+QUERY 4 
+EXPLAIN ANALYZE
+SELECT host.id,host.name,COUNT(listing2.id) as number_of_listings
+FROM listing2 INNER JOIN host ON host.id=listing2.host_id
+GROUP BY host.id,host.name
+HAVING  COUNT(listing2.id)>10
+
+BEFORE ADDING INDEX
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+HashAggregate  (cost=3667.45..3746.99 rows=2121 width=20) (actual time=19.427..20.249 rows=95 loops=1)
+  Group Key: host.id
+  Filter: (count(listing2.id) > 10)
+  Rows Removed by Filter: 6268
+  ->  Hash Join  (cost=618.17..3580.89 rows=11541 width=16) (actual time=3.337..16.214 rows=11541 loops=1)
+        Hash Cond: (listing2.host_id = host.id)
+        ->  Seq Scan on listing2  (cost=0.00..2932.41 rows=11541 width=8) (actual time=0.017..9.928 rows=11541 loops=1)
+        ->  Hash  (cost=538.63..538.63 rows=6363 width=12) (actual time=3.270..3.270 rows=6363 loops=1)
+              Buckets: 8192  Batches: 1  Memory Usage: 344kB
+              ->  Seq Scan on host  (cost=0.00..538.63 rows=6363 width=12) (actual time=0.007..2.016 rows=6363 loops=1)
+Planning Time: 0.321 ms
+Execution Time: 20.801 ms
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+AFTER ADDING INDEX
+---------------------------------------------------------------------------------------------------------------------------------
+
+GroupAggregate  (cost=0.57..10194.50 rows=2121 width=20) (actual time=0.240..22.905 rows=95 loops=1)
+  Group Key: host.id
+  Filter: (count(listing2.id) > 10)
+  Rows Removed by Filter: 6268
+  ->  Merge Join  (cost=0.57..10028.41 rows=11541 width=16) (actual time=0.020..20.416 rows=11541 loops=1)
+        Merge Cond: (listing2.host_id = host.id)
+        ->  Index Scan using host_id_index_for_listing on listing2  (cost=0.29..9214.51 rows=11541 width=8) (actual time=0.011..15.264 rows=11541 loops=1)
+        ->  Index Scan using host_pkey on host  (cost=0.28..653.73 rows=6363 width=12) (actual time=0.006..1.644 rows=6363 loops=1)
+Planning Time: 0.302 ms
+Execution Time: 22.957 ms
+
+-----------------------------------------------------------------------------------------------------------------------------
+/* Query 4: w/out index: 20.801 ms, w/index: 22.957 ms */
+
+Kaname index tis sthles toy having.
+------------------------------------------------------------------------------------------------------------------------------
+
+******************************************************************************************************************************
+
+QUERY 5
+EXPLAIN ANALYZE
+SELECT listing2.host_id,host.name,listing2.name
+FROM listing2 FULL OUTER JOIN host ON host.id=listing2.host_id
+ORDER BY listing2.host_id
+
+BEFORE ADDING INDEX
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Sort  (cost=4359.59..4388.45 rows=11541 width=50) (actual time=21.432..21.765 rows=11541 loops=1)
+  Sort Key: listing2.host_id
+  Sort Method: quicksort  Memory: 1729kB
+  ->  Hash Full Join  (cost=618.17..3580.89 rows=11541 width=50) (actual time=3.411..16.959 rows=11541 loops=1)
+        Hash Cond: (listing2.host_id = host.id)
+        ->  Seq Scan on listing2  (cost=0.00..2932.41 rows=11541 width=42) (actual time=0.016..10.349 rows=11541 loops=1)
+        ->  Hash  (cost=538.63..538.63 rows=6363 width=12) (actual time=3.339..3.340 rows=6363 loops=1)
+              Buckets: 8192  Batches: 1  Memory Usage: 354kB
+              ->  Seq Scan on host  (cost=0.00..538.63 rows=6363 width=12) (actual time=0.026..2.046 rows=6363 loops=1)
+Planning Time: 0.217 ms
+Execution Time: 23.128 ms
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+AFTER ADDING INDEX
+---------------------------------------------------------------------------------------------------------------------------------
+
+Sort  (cost=10807.11..10835.96 rows=11541 width=50) (actual time=23.213..23.641 rows=11541 loops=1)
+  Sort Key: listing2.host_id
+  Sort Method: quicksort  Memory: 1729kB
+  ->  Merge Full Join  (cost=0.57..10028.41 rows=11541 width=50) (actual time=0.033..20.191 rows=11541 loops=1)
+        Merge Cond: (listing2.host_id = host.id)
+        ->  Index Scan using host_id_index_for_listing on listing2  (cost=0.29..9214.51 rows=11541 width=42) (actual time=0.021..15.075 rows=11541 loops=1)
+        ->  Index Scan using host_pkey on host  (cost=0.28..653.73 rows=6363 width=12) (actual time=0.009..1.678 rows=6363 loops=1)
+Planning Time: 0.185 ms
+Execution Time: 24.619 ms
+
+-----------------------------------------------------------------------------------------------------------------------------
+/* Query 5: w/out index: 23.128 ms, w/index: 24.619 ms */
+
+Kaname index tis shles toy order by efoson den yparxei where/having.
+------------------------------------------------------------------------------------------------------------------------------
+
+******************************************************************************************************************************
+
+QUERY 6
+EXPLAIN ANALYZE
+SELECT host.id as host_id ,listing2.id as listing_id,has_availability, is_superhost
+FROM listing2 FULL OUTER JOIN host ON host.id=listing2.host_id
+WHERE has_availability='true' AND is_superhost='true'
+
+BEFORE ADDING INDEX
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Hash Join  (cost=568.01..3530.73 rows=4262 width=10) (actual time=2.806..20.889 rows=4367 loops=1)
+  Hash Cond: (listing2.host_id = host.id)
+  ->  Seq Scan on listing2  (cost=0.00..2932.41 rows=11541 width=9) (actual time=0.017..16.083 rows=11541 loops=1)
+        Filter: has_availability
+  ->  Hash  (cost=538.63..538.63 rows=2350 width=5) (actual time=2.767..2.767 rows=2350 loops=1)
+        Buckets: 4096  Batches: 1  Memory Usage: 117kB
+        ->  Seq Scan on host  (cost=0.00..538.63 rows=2350 width=5) (actual time=0.007..2.325 rows=2350 loops=1)
+              Filter: is_superhost
+              Rows Removed by Filter: 4013
+Planning Time: 0.282 ms
+Execution Time: 21.036 ms
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+AFTER ADDING INDEX
+---------------------------------------------------------------------------------------------------------------------------------
+
+Hash Join  (cost=578.65..3766.94 rows=4262 width=10) (actual time=2.028..21.213 rows=4367 loops=1)
+  Hash Cond: (listing2.host_id = host.id)
+  ->  Index Scan using has_availability_index_for_listing on listing2  (cost=0.29..3158.25 rows=11541 width=9) (actual time=0.024..17.226 rows=11541 loops=1)
+        Index Cond: (has_availability = true)
+        Filter: has_availability
+  ->  Hash  (cost=549.00..549.00 rows=2350 width=5) (actual time=1.993..1.993 rows=2350 loops=1)
+        Buckets: 4096  Batches: 1  Memory Usage: 117kB
+        ->  Bitmap Heap Scan on host  (cost=50.49..549.00 rows=2350 width=5) (actual time=0.254..1.619 rows=2350 loops=1)
+              Filter: is_superhost
+              Heap Blocks: exact=459
+              ->  Bitmap Index Scan on is_superhost_index_for_host  (cost=0.00..49.91 rows=2350 width=0) (actual time=0.189..0.189 rows=2350 loops=1)
+                    Index Cond: (is_superhost = true)
+Planning Time: 0.339 ms
+Execution Time: 21.389 ms
+
+-----------------------------------------------------------------------------------------------------------------------------
+/* Query 6: w/out index: 21.036 ms, w/index: 21.389 ms */
+
+Kaname index tis sthles toy where.
+------------------------------------------------------------------------------------------------------------------------------
+
+******************************************************************************************************************************
+QUERY 7
+EXPLAIN ANALYZE
+SELECT neighbourhood,geometry_coordinates_0_0_7_0
+FROM geolocation2 INNER JOIN neighbourhood2 on neighbourhood2.neighbourhood=geolocation2.properties_neighbourhood
+GROUP BY neighbourhood,geometry_coordinates_0_0_7_0
+
+BEFORE ADDING INDEX
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+HashAggregate  (cost=10.82..11.27 rows=45 width=30) (actual time=0.140..0.147 rows=45 loops=1)
+  Group Key: neighbourhood2.neighbourhood, geolocation2.geometry_coordinates_0_0_7_0
+  ->  Hash Join  (cost=2.01..10.59 rows=45 width=30) (actual time=0.060..0.121 rows=45 loops=1)
+        Hash Cond: ((geolocation2.properties_neighbourhood)::text = (neighbourhood2.neighbourhood)::text)
+        ->  Seq Scan on geolocation2  (cost=0.00..8.45 rows=45 width=30) (actual time=0.020..0.034 rows=45 loops=1)
+        ->  Hash  (cost=1.45..1.45 rows=45 width=21) (actual time=0.031..0.031 rows=45 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 11kB
+              ->  Seq Scan on neighbourhood2  (cost=0.00..1.45 rows=45 width=21) (actual time=0.010..0.017 rows=45 loops=1)
+Planning Time: 121.170 ms
+Execution Time: 0.229 ms
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+AFTER ADDING INDEX
+---------------------------------------------------------------------------------------------------------------------------------
+
+HashAggregate  (cost=29.53..29.98 rows=45 width=30) (actual time=0.125..0.130 rows=45 loops=1)
+  Group Key: neighbourhood2.neighbourhood, geolocation2.geometry_coordinates_0_0_7_0
+  ->  Merge Join  (cost=0.28..29.31 rows=45 width=30) (actual time=0.017..0.109 rows=45 loops=1)
+        Merge Cond: ((geolocation2.properties_neighbourhood)::text = (neighbourhood2.neighbourhood)::text)
+        ->  Index Scan using geolocation2_pkey on geolocation2  (cost=0.14..19.82 rows=45 width=30) (actual time=0.007..0.024 rows=45 loops=1)
+        ->  Index Only Scan using neighbourhoods2_pkey on neighbourhood2  (cost=0.14..8.81 rows=45 width=21) (actual time=0.005..0.010 rows=45 loops=1)
+              Heap Fetches: 0
+Planning Time: 0.307 ms
+Execution Time: 0.206 ms
+
+-----------------------------------------------------------------------------------------------------------------------------
+/* Query 7: w/out index: 0.229 ms, w/index: 0.206 ms */
+
+Kaname index toy geometry_coordinates_0_0_7_0 dioti einai sto group by kai vrisketai ston pinaka geolocations kai efoson den yparxei where/having.
+------------------------------------------------------------------------------------------------------------------------------
