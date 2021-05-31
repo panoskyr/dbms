@@ -173,6 +173,13 @@ AFTER INSERT ON reviews
 FOR EACH ROW
 EXECUTE PROCEDURE addReviewTrigger();
 
+/*
+*
+*trigger for reviews. when deleting a review we decrease the number_of_reviews column in listings
+*
+*
+*/
+
 
 CREATE OR REPLACE FUNCTION delReviewTrigger()
 	RETURNS TRIGGER AS
