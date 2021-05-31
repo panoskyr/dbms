@@ -45,7 +45,7 @@ CREATE OR REPLACE FUNCTION removelistings()
 
 
 CREATE TRIGGER removeListingsTrigger
-AFTER INSERT ON listings
+AFTER DELETE ON listings
 FOR EACH ROW
 EXECUTE PROCEDURE removelistings();
 
