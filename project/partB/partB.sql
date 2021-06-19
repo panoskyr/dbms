@@ -1,11 +1,11 @@
 --Allazoyme thn sthlh genres gia na borei na xrhsimopoieithei katallhla
-
+/*45433*/
 UPDATE 
    project.movies_metadata
 SET 
    genres = REPLACE(genres,E'''', '"');
 
-alter table movies_metadata
+alter table project.movies_metadata
 alter column genres type jsonb USING genres::jsonb;
 
 --Allazoyme th sthlh vote_average se numeric oste na doylepsei h synarthsh AVG

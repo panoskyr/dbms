@@ -51,7 +51,7 @@ create table project.RatingsTemp(
 );
 
 --Meta kanoyme import ta csv kai ta eisagoyme stoys temp pinakes apo to pgadmin
-
+--encoding utf8 ,fromat csv,header yes,delimiter
 --Tora ftiaxnoyme ta kanonika tables xoris ta duplicates me thn entolh distinct
 
 CREATE TABLE project.Credits AS SELECT DISTINCT * FROM project.CreditsTemp;
@@ -61,14 +61,14 @@ CREATE TABLE project.Movies_Metadata AS SELECT DISTINCT * FROM project.Movies_Me
 CREATE TABLE project.Ratings AS SELECT * FROM project.RatingsTemp;
 
 --Tora diagrafoyme ta dedomena tainion opoy den yparxoyn ston pinaka “movies_metadata”
-
+/*0,0,161,55015*/
 DELETE FROM project.Credits WHERE id NOT IN (SELECT m.id FROM project.Movies_Metadata m);
 DELETE FROM project.Keywords WHERE id NOT IN (SELECT m.id FROM project.Movies_Metadata m);
 DELETE FROM project.Links WHERE tmdbId NOT IN (SELECT m.id FROM project.Movies_Metadata m);
 DELETE FROM project.Ratings WHERE movieId NOT IN (SELECT m.id FROM project.Movies_Metadata m);
 
 --Yparxoyn rows poy exoyn ta idia akrivos ids alla diaforetika stoixia se alla columns opote me ayto to querie ftiaxnoyme ayto to provlhma
-
+/*13,7*/
 DELETE FROM project.Movies_Metadata M1 USING project.Movies_Metadata M2 WHERE  M1.popularity < M2.popularity AND M1.id=M2.id;
 DELETE FROM project.Credits C1 USING project.Credits C2 WHERE C1.crew < C2.crew AND C1.id=C2.id;
 

@@ -8,8 +8,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 DB_HOST='adb21.postgres.database.azure.com'
-DB_USER='con1@adb21'
-DB_PASSWORD='con1'
+DB_USER='examiner@adb21'
+DB_PASSWORD='examiner_pass'
 DB_NAME='postgres'
 
 connection=psycopg2.connect(
